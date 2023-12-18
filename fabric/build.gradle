@@ -15,6 +15,21 @@ configurations {
     developmentFabric.extendsFrom common
 }
 
+loom {
+    accessWidenerPath.set(project(":common").loom.accessWidenerPath)
+
+    // Fabric Datagen Gradle config.  Remove if not using Fabric datagen
+    runs.create("datagen") {
+        client()
+        name("Data Generation")
+        vmArg("-Dfabric-api.datagen")
+        vmArg("-Dfabric-api.datagen.output-dir=${project(":common").file("src/main/generated/resources").absolutePath}")
+        vmArg("-Dfabric-api.datagen.modid=byg")
+
+        runDir("build/datagen")
+    }
+}
+
 dependencies {
     modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
     modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
@@ -23,6 +38,10 @@ dependencies {
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
+}
+
+tasks {
+    base.archivesName.set(base.archivesName.get() + "-Fabric")
 }
 
 processResources {
@@ -57,19 +76,5 @@ sourcesJar {
 components.java {
     withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
         skip()
-    }
-}
-
-publishing {
-    publications {
-        mavenFabric(MavenPublication) {
-            artifactId = rootProject.archives_base_name + "-" + project.name
-            from components.java
-        }
-    }
-
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-    repositories {
-        // Add repositories to publish to here.
     }
 }

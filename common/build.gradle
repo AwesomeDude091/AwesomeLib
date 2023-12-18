@@ -6,20 +6,10 @@ dependencies {
     modApi "dev.architectury:architectury:${rootProject.architectury_version}"
 }
 
+loom.accessWidenerPath.set(file("src/main/resources/alib.accesswidener"))
+
+sourceSets.main.resources.srcDir("src/main/generated/resources")
+
 architectury {
     common("fabric", "forge")
-}
-
-publishing {
-    publications {
-        mavenCommon(MavenPublication) {
-            artifactId = rootProject.archives_base_name
-            from components.java
-        }
-    }
-
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-    repositories {
-        // Add repositories to publish to here.
-    }
 }

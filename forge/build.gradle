@@ -14,6 +14,18 @@ configurations {
     developmentForge.extendsFrom common
 }
 
+loom {
+    accessWidenerPath.set(project(":common").loom.accessWidenerPath)
+
+    forge {
+        convertAccessWideners.set(true)
+        extraAccessWideners.add(loom.accessWidenerPath.get().asFile.name)
+
+        mixinConfig("byg-common.mixins.json")
+        mixinConfig("byg.mixins.json")
+    }
+}
+
 dependencies {
     forge "net.minecraftforge:forge:${rootProject.forge_version}"
     // Remove the next line if you don't want to depend on the API
@@ -21,6 +33,10 @@ dependencies {
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
+}
+
+tasks {
+    base.archivesName.set(base.archivesName.get() + "-Forge")
 }
 
 processResources {
@@ -57,19 +73,5 @@ sourcesJar {
 components.java {
     withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
         skip()
-    }
-}
-
-publishing {
-    publications {
-        mavenForge(MavenPublication) {
-            artifactId = rootProject.archives_base_name + "-" + project.name
-            from components.java
-        }
-    }
-
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-    repositories {
-        // Add repositories to publish to here.
     }
 }
