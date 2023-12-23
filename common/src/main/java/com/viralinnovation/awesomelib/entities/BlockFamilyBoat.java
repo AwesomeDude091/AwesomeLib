@@ -2,7 +2,7 @@ package com.viralinnovation.awesomelib.entities;
 
 import com.viralinnovation.awesomelib.config.Variants;
 import com.viralinnovation.awesomelib.context.RegistrationContext;
-import com.viralinnovation.awesomelib.loot.AwesomeLootContextParams;
+import com.viralinnovation.awesomelib.loot.BlockFamiliesLootContextParams;
 import com.viralinnovation.awesomelib.registry.BlockFamily;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -39,7 +39,7 @@ public class BlockFamilyBoat extends Boat {
 
     private static final EntityDataAccessor<String> AWESOME_BOAT_TYPE = SynchedEntityData.defineId(BlockFamilyBoat.class, EntityDataSerializers.STRING);
     private static final LootContextParamSet LOOT_CONTEXT_PARAM_SETS = LootContextParamSet.builder()
-            .required(AwesomeLootContextParams.BOAT_TYPE)
+            .required(BlockFamiliesLootContextParams.BOAT_TYPE)
             .required(LootContextParams.THIS_ENTITY)
             .required(LootContextParams.ORIGIN)
             .required(LootContextParams.DAMAGE_SOURCE)
@@ -68,7 +68,7 @@ public class BlockFamilyBoat extends Boat {
     public List<ItemStack> getDrops(DamageSource damageSource, boolean isFall) {
         if (level() instanceof ServerLevel serverLevel) {
             LootParams lootContext = new LootParams.Builder(serverLevel)
-                    .withParameter(AwesomeLootContextParams.BOAT_TYPE, getAwesomeBoatType())
+                    .withParameter(BlockFamiliesLootContextParams.BOAT_TYPE, getAwesomeBoatType())
                     .withParameter(LootContextParams.THIS_ENTITY, this)
                     .withParameter(LootContextParams.ORIGIN, position())
                     .withParameter(LootContextParams.DAMAGE_SOURCE, damageSource)
