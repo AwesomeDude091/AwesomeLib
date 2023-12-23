@@ -1,8 +1,8 @@
 package com.viralinnovation.awesomelib.registry;
 
-import com.viralinnovation.awesomelib.config.BlockVariant;
-import com.viralinnovation.awesomelib.config.ItemVariant;
-import com.viralinnovation.awesomelib.config.ParticleVariant;
+import com.viralinnovation.awesomelib.config.types.BlockVariant;
+import com.viralinnovation.awesomelib.config.types.ItemVariant;
+import com.viralinnovation.awesomelib.config.types.ParticleVariant;
 import com.viralinnovation.awesomelib.config.Variants;
 import com.viralinnovation.awesomelib.context.RegistrationContext;
 import dev.architectury.registry.registries.RegistrySupplier;

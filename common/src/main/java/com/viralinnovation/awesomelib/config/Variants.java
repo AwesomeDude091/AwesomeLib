@@ -1,6 +1,11 @@
 package com.viralinnovation.awesomelib.config;
 
 import com.viralinnovation.awesomelib.blocks.ParticleLeaves;
+import com.viralinnovation.awesomelib.config.attributes.CompostableVariant;
+import com.viralinnovation.awesomelib.config.attributes.FlammableVariant;
+import com.viralinnovation.awesomelib.config.attributes.StrippableVariant;
+import com.viralinnovation.awesomelib.config.types.BlockVariant;
+import com.viralinnovation.awesomelib.config.types.ItemVariant;
 import com.viralinnovation.awesomelib.context.RegistrationContext;
 import com.viralinnovation.awesomelib.items.BlockFamilyBoatItem;
 import com.viralinnovation.awesomelib.registry.BlockFamily;
@@ -21,14 +26,15 @@ import net.minecraft.world.level.material.PushReaction;
 
 import java.util.function.Supplier;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "UnstableApiUsage"})
 public final class Variants {
 
     // Item Variants
 
     public static Boat BOAT = new Boat();
 
-    public static class Boat extends ItemVariant {
+
+    public static class Boat implements ItemVariant {
 
         @Override
         public String getPrefix(ResourceKey<DimensionType> dimension) {
@@ -54,7 +60,7 @@ public final class Variants {
 
     public static ChestBoat CHEST_BOAT = new ChestBoat();
 
-    public static class ChestBoat extends ItemVariant {
+    public static class ChestBoat implements ItemVariant {
 
         @Override
         public String getPrefix(ResourceKey<DimensionType> dimension) {
@@ -82,7 +88,7 @@ public final class Variants {
 
     public static BaseBlock baseBlock = new BaseBlock();
     // This is merely a Storage Index, it will never generate a block
-    public static class BaseBlock extends BlockVariant<BlockSetType> {
+    public static class BaseBlock implements BlockVariant<BlockSetType> {
 
         @Override
         public String getPrefix(ResourceKey<DimensionType> dimension) {
@@ -112,7 +118,7 @@ public final class Variants {
 
     public static Bookshelf BOOKSHELF = new Bookshelf();
 
-    public static class Bookshelf extends BlockVariant<WoodType> {
+    public static class Bookshelf implements BlockVariant<WoodType>, FlammableVariant {
         @Override
         public String getPrefix(ResourceKey<DimensionType> dimension) {
             return "";
@@ -125,12 +131,22 @@ public final class Variants {
 
         @Override
         public Supplier<? extends Block> getBlockSupplier(WoodType woodType, Supplier<? extends Block> baseBlock, ResourceKey<DimensionType> dimension, Supplier<? extends SimpleParticleType> particleOption, MapColor color, BlockFamily family, RegistrationContext context) {
-            return () -> new Block(createWoodProperties());
+            return () -> new Block(BlockVariant.createWoodProperties());
         }
 
         @Override
         public Supplier<? extends Item> getItemSupplier(WoodType blockSetType, Supplier<? extends Block> associatedBlock, ResourceKey<DimensionType> dimension, BlockFamily family, RegistrationContext context) {
             return () -> new BlockItem(associatedBlock.get(), new Item.Properties().arch$tab(context.getDefaultTab()));
+        }
+
+        @Override
+        public int getBurnChance() {
+            return 5;
+        }
+
+        @Override
+        public int getSpreadChance() {
+            return 20;
         }
 
         @Override
@@ -141,7 +157,7 @@ public final class Variants {
 
     public static Button BUTTON = new Button();
 
-    public static class Button extends BlockVariant<BlockSetType> {
+    public static class Button implements BlockVariant<BlockSetType> {
         @Override
         public String getPrefix(ResourceKey<DimensionType> dimension) {
             return "";
@@ -172,7 +188,7 @@ public final class Variants {
 
     public static Door DOOR = new Door();
 
-    public static class Door extends BlockVariant<BlockSetType> {
+    public static class Door implements BlockVariant<BlockSetType> {
         @Override
         public String getPrefix(ResourceKey<DimensionType> dimension) {
             return "";
@@ -185,7 +201,7 @@ public final class Variants {
 
         @Override
         public Supplier<? extends Block> getBlockSupplier(BlockSetType blockSetType, Supplier<? extends Block> baseBlock, ResourceKey<DimensionType> dimension, Supplier<? extends SimpleParticleType> particleOption, MapColor color, BlockFamily family, RegistrationContext context) {
-            return () -> new DoorBlock(createWoodProperties().noOcclusion(), blockSetType);
+            return () -> new DoorBlock(BlockVariant.createWoodProperties().noOcclusion(), blockSetType);
         }
 
         @Override
@@ -201,7 +217,7 @@ public final class Variants {
 
     public static Fence FENCE = new Fence();
 
-    public static class Fence extends BlockVariant<BlockSetType> {
+    public static class Fence implements BlockVariant<BlockSetType> {
         @Override
         public String getPrefix(ResourceKey<DimensionType> dimension) {
             return "";
@@ -214,7 +230,7 @@ public final class Variants {
 
         @Override
         public Supplier<? extends Block> getBlockSupplier(BlockSetType blockSetType, Supplier<? extends Block> baseBlock, ResourceKey<DimensionType> dimension, Supplier<? extends SimpleParticleType> particleOption, MapColor color, BlockFamily family, RegistrationContext context) {
-            return () -> new FenceBlock(createWoodProperties());
+            return () -> new FenceBlock(BlockVariant.createWoodProperties());
         }
 
         @Override
@@ -230,7 +246,7 @@ public final class Variants {
 
     public static FenceGate fenceGate = new FenceGate();
 
-    public static class FenceGate extends BlockVariant<WoodType> {
+    public static class FenceGate implements BlockVariant<WoodType> {
         @Override
         public String getPrefix(ResourceKey<DimensionType> dimension) {
             return "";
@@ -243,7 +259,7 @@ public final class Variants {
 
         @Override
         public Supplier<? extends Block> getBlockSupplier(WoodType woodType, Supplier<? extends Block> baseBlock, ResourceKey<DimensionType> dimension, Supplier<? extends SimpleParticleType> particleOption, MapColor color, BlockFamily family, RegistrationContext context) {
-            return () -> new FenceGateBlock(createWoodProperties(), woodType);
+            return () -> new FenceGateBlock(BlockVariant.createWoodProperties(), woodType);
         }
 
         @Override
@@ -259,7 +275,7 @@ public final class Variants {
 
     public static HangingSign hangingSign = new HangingSign();
 
-    public static class HangingSign extends BlockVariant<WoodType> {
+    public static class HangingSign implements BlockVariant<WoodType> {
         @Override
         public String getPrefix(ResourceKey<DimensionType> dimension) {
             return "";
@@ -291,7 +307,7 @@ public final class Variants {
 
     public static WallHangingSign wallHangingSign = new WallHangingSign();
 
-    public static class WallHangingSign extends BlockVariant<WoodType> {
+    public static class WallHangingSign implements BlockVariant<WoodType> {
         @Override
         public String getPrefix(ResourceKey<DimensionType> dimension) {
             return "";
@@ -322,7 +338,7 @@ public final class Variants {
 
     public static Leaves LEAVES = new Leaves();
 
-    public static class Leaves extends BlockVariant<BlockSetType> {
+    public static class Leaves implements BlockVariant<BlockSetType>, FlammableVariant, CompostableVariant {
         @Override
         public String getPrefix(ResourceKey<DimensionType> dimension) {
             return "";
@@ -351,6 +367,21 @@ public final class Variants {
         }
 
         @Override
+        public int getBurnChance() {
+            return 30;
+        }
+
+        @Override
+        public int getSpreadChance() {
+            return 60;
+        }
+
+        @Override
+        public float getChance() {
+            return 0.3F;
+        }
+
+        @Override
         public Class<? extends BlockVariant<?>> getClazz() {
             return this.getClass();
         }
@@ -358,7 +389,7 @@ public final class Variants {
 
     public static Log LOG = new Log();
 
-    public static class Log extends BlockVariant<WoodType> {
+    public static class Log implements BlockVariant<WoodType>, FlammableVariant, StrippableVariant {
         @Override
         public String getPrefix(ResourceKey<DimensionType> dimension) {
             return "";
@@ -373,12 +404,27 @@ public final class Variants {
         public Supplier<? extends Block> getBlockSupplier(WoodType blockSetType, Supplier<? extends Block> baseBlock, ResourceKey<DimensionType> dimension, Supplier<? extends SimpleParticleType> particleOption, MapColor color, BlockFamily family, RegistrationContext context) {
             return !dimension.equals(BuiltinDimensionTypes.NETHER) ?
                     () -> new RotatedPillarBlock(BlockBehaviour.Properties.of().sound(SoundType.WOOD).strength(2.0f)) :
-                    () -> new RotatedPillarBlock(createNetherProperties());
+                    () -> new RotatedPillarBlock(BlockVariant.createNetherProperties());
         }
 
         @Override
         public Supplier<? extends Item> getItemSupplier(WoodType blockSetType, Supplier<? extends Block> associatedBlock, ResourceKey<DimensionType> dimension, BlockFamily family, RegistrationContext context) {
             return () -> new BlockItem(associatedBlock.get(), new Item.Properties().arch$tab(context.getDefaultTab()));
+        }
+
+        @Override
+        public int getSpreadChance() {
+            return 5;
+        }
+
+        @Override
+        public int getBurnChance() {
+            return 5;
+        }
+
+        @Override
+        public Supplier<? extends Block> getStrippedBlock(ResourceKey<DimensionType> dimension, BlockFamily family, RegistrationContext context) {
+            return family.getBlock(StrippedLog.class);
         }
 
         @Override
@@ -389,7 +435,7 @@ public final class Variants {
 
     public static Planks PLANKS = new Planks();
 
-    public static class Planks extends BlockVariant<WoodType> {
+    public static class Planks implements BlockVariant<WoodType>, FlammableVariant {
         @Override
         public String getPrefix(ResourceKey<DimensionType> dimension) {
             return "";
@@ -402,12 +448,22 @@ public final class Variants {
 
         @Override
         public Supplier<? extends Block> getBlockSupplier(WoodType blockSetType, Supplier<? extends Block> baseBlock, ResourceKey<DimensionType> dimension, Supplier<? extends SimpleParticleType> particleOption, MapColor color, BlockFamily family, RegistrationContext context) {
-            return () -> new Block(createWoodProperties());
+            return () -> new Block(BlockVariant.createWoodProperties());
         }
 
         @Override
         public Supplier<? extends Item> getItemSupplier(WoodType blockSetType, Supplier<? extends Block> associatedBlock, ResourceKey<DimensionType> dimension, BlockFamily family, RegistrationContext context) {
             return () -> new BlockItem(associatedBlock.get(), new Item.Properties().arch$tab(context.getDefaultTab()));
+        }
+
+        @Override
+        public int getBurnChance() {
+            return 5;
+        }
+
+        @Override
+        public int getSpreadChance() {
+            return 20;
         }
 
         @Override
@@ -418,7 +474,7 @@ public final class Variants {
 
     public static PressurePlate pressurePlate = new PressurePlate();
 
-    public static class PressurePlate extends BlockVariant<BlockSetType> {
+    public static class PressurePlate implements BlockVariant<BlockSetType> {
 
         @Override
         public String getPrefix(ResourceKey<DimensionType> dimension) {
@@ -449,7 +505,7 @@ public final class Variants {
 
     public static Sign SIGN = new Sign();
 
-    public static class Sign extends BlockVariant<WoodType> {
+    public static class Sign implements BlockVariant<WoodType> {
 
         @Override
         public String getPrefix(ResourceKey<DimensionType> dimension) {
@@ -482,7 +538,7 @@ public final class Variants {
 
     public static WallSign wallSign = new WallSign();
 
-    public static class WallSign extends BlockVariant<WoodType> {
+    public static class WallSign implements BlockVariant<WoodType> {
 
         @Override
         public String getPrefix(ResourceKey<DimensionType> dimension) {
@@ -514,7 +570,7 @@ public final class Variants {
 
     public static Slab SLAB = new Slab();
 
-    public static class Slab extends BlockVariant<BlockSetType> {
+    public static class Slab implements BlockVariant<BlockSetType>, FlammableVariant {
 
         @Override
         public String getPrefix(ResourceKey<DimensionType> dimension) {
@@ -528,12 +584,22 @@ public final class Variants {
 
         @Override
         public Supplier<? extends Block> getBlockSupplier(BlockSetType blockSetType, Supplier<? extends Block> baseBlock, ResourceKey<DimensionType> dimension, Supplier<? extends SimpleParticleType> particleOption, MapColor color, BlockFamily family, RegistrationContext context) {
-            return () -> new SlabBlock(createWoodProperties());
+            return () -> new SlabBlock(BlockVariant.createWoodProperties());
         }
 
         @Override
         public Supplier<? extends Item> getItemSupplier(BlockSetType blockSetType, Supplier<? extends Block> associatedBlock, ResourceKey<DimensionType> dimension, BlockFamily family, RegistrationContext context) {
             return () -> new BlockItem(associatedBlock.get(), new Item.Properties().arch$tab(context.getDefaultTab()));
+        }
+
+        @Override
+        public int getBurnChance() {
+            return 5;
+        }
+
+        @Override
+        public int getSpreadChance() {
+            return 20;
         }
 
         @Override
@@ -544,7 +610,7 @@ public final class Variants {
 
     public static Stairs STAIRS = new Stairs();
 
-    public static class Stairs extends BlockVariant<BlockSetType> {
+    public static class Stairs implements BlockVariant<BlockSetType>, FlammableVariant {
 
         @Override
         public String getPrefix(ResourceKey<DimensionType> dimension) {
@@ -568,6 +634,16 @@ public final class Variants {
         }
 
         @Override
+        public int getBurnChance() {
+            return 5;
+        }
+
+        @Override
+        public int getSpreadChance() {
+            return 20;
+        }
+
+        @Override
         public Class<? extends BlockVariant<?>> getClazz() {
             return this.getClass();
         }
@@ -575,7 +651,7 @@ public final class Variants {
 
     public static StrippedLog strippedLog = new StrippedLog();
 
-    public static class StrippedLog extends BlockVariant<WoodType> {
+    public static class StrippedLog implements BlockVariant<WoodType>, FlammableVariant {
 
         @Override
         public String getPrefix(ResourceKey<DimensionType> dimension) {
@@ -591,12 +667,22 @@ public final class Variants {
         public Supplier<? extends Block> getBlockSupplier(WoodType blockSetType, Supplier<? extends Block> baseBlock, ResourceKey<DimensionType> dimension, Supplier<? extends SimpleParticleType> particleOption, MapColor color, BlockFamily family, RegistrationContext context) {
             return !dimension.equals(BuiltinDimensionTypes.NETHER) ?
                     () -> new RotatedPillarBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).sound(SoundType.WOOD).strength(2.0f)) :
-                    () -> new RotatedPillarBlock(createNetherProperties());
+                    () -> new RotatedPillarBlock(BlockVariant.createNetherProperties());
         }
 
         @Override
         public Supplier<? extends Item> getItemSupplier(WoodType blockSetType, Supplier<? extends Block> associatedBlock, ResourceKey<DimensionType> dimension, BlockFamily family, RegistrationContext context) {
             return () -> new BlockItem(associatedBlock.get(), new Item.Properties().arch$tab(context.getDefaultTab()));
+        }
+
+        @Override
+        public int getBurnChance() {
+            return 5;
+        }
+
+        @Override
+        public int getSpreadChance() {
+            return 5;
         }
 
         @Override
@@ -607,7 +693,7 @@ public final class Variants {
 
     public static StrippedWood strippedWood = new StrippedWood();
 
-    public static class StrippedWood extends BlockVariant<WoodType> {
+    public static class StrippedWood implements BlockVariant<WoodType>, FlammableVariant {
 
         @Override
         public String getPrefix(ResourceKey<DimensionType> dimension) {
@@ -623,12 +709,22 @@ public final class Variants {
         public Supplier<? extends Block> getBlockSupplier(WoodType blockSetType, Supplier<? extends Block> baseBlock, ResourceKey<DimensionType> dimension, Supplier<? extends SimpleParticleType> particleOption, MapColor color, BlockFamily family, RegistrationContext context) {
             return !dimension.equals(BuiltinDimensionTypes.NETHER) ?
                     () -> new RotatedPillarBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).sound(SoundType.WOOD).strength(2.0f)) :
-                    () -> new RotatedPillarBlock(createNetherProperties());
+                    () -> new RotatedPillarBlock(BlockVariant.createNetherProperties());
         }
 
         @Override
         public Supplier<? extends Item> getItemSupplier(WoodType blockSetType, Supplier<? extends Block> associatedBlock, ResourceKey<DimensionType> dimension, BlockFamily family, RegistrationContext context) {
             return () -> new BlockItem(associatedBlock.get(), new Item.Properties().arch$tab(context.getDefaultTab()));
+        }
+
+        @Override
+        public int getBurnChance() {
+            return 5;
+        }
+
+        @Override
+        public int getSpreadChance() {
+            return 5;
         }
 
         @Override
@@ -639,7 +735,7 @@ public final class Variants {
 
     public static Trapdoor TRAPDOOR = new Trapdoor();
 
-    public static class Trapdoor extends BlockVariant<BlockSetType> {
+    public static class Trapdoor implements BlockVariant<BlockSetType> {
 
         @Override
         public String getPrefix(ResourceKey<DimensionType> dimension) {
@@ -653,7 +749,7 @@ public final class Variants {
 
         @Override
         public Supplier<? extends Block> getBlockSupplier(BlockSetType blockSetType, Supplier<? extends Block> baseBlock, ResourceKey<DimensionType> dimension, Supplier<? extends SimpleParticleType> particleOption, MapColor color, BlockFamily family, RegistrationContext context) {
-            return () -> new TrapDoorBlock(createWoodProperties().noOcclusion(), blockSetType);
+            return () -> new TrapDoorBlock(BlockVariant.createWoodProperties().noOcclusion(), blockSetType);
         }
 
         @Override
@@ -669,7 +765,7 @@ public final class Variants {
 
     public static Wood WOOD = new Wood();
 
-    public static class Wood extends BlockVariant<WoodType> {
+    public static class Wood implements BlockVariant<WoodType>, FlammableVariant, StrippableVariant {
 
         @Override
         public String getPrefix(ResourceKey<DimensionType> dimension) {
@@ -685,12 +781,27 @@ public final class Variants {
         public Supplier<? extends Block> getBlockSupplier(WoodType blockSetType, Supplier<? extends Block> baseBlock, ResourceKey<DimensionType> dimension, Supplier<? extends SimpleParticleType> particleOption, MapColor color, BlockFamily family, RegistrationContext context) {
             return !dimension.equals(BuiltinDimensionTypes.NETHER) ?
                     () -> new RotatedPillarBlock(BlockBehaviour.Properties.of().sound(SoundType.WOOD).strength(2.0f)) :
-                    () -> new RotatedPillarBlock(createNetherProperties());
+                    () -> new RotatedPillarBlock(BlockVariant.createNetherProperties());
         }
 
         @Override
         public Supplier<? extends Item> getItemSupplier(WoodType blockSetType, Supplier<? extends Block> associatedBlock, ResourceKey<DimensionType> dimension, BlockFamily family, RegistrationContext context) {
             return () -> new BlockItem(associatedBlock.get(), new Item.Properties().arch$tab(context.getDefaultTab()));
+        }
+
+        @Override
+        public int getBurnChance() {
+            return 5;
+        }
+
+        @Override
+        public int getSpreadChance() {
+            return 5;
+        }
+
+        @Override
+        public Supplier<? extends Block> getStrippedBlock(ResourceKey<DimensionType> dimension, BlockFamily family, RegistrationContext context) {
+            return family.getBlock(StrippedWood.class);
         }
 
         @Override
